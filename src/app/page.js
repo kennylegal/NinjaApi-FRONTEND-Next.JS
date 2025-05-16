@@ -3,28 +3,28 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import useSWR from "swr";
+
+const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 export default function Home() {
 
-  const [dataStr, setDataStr] = useState('');
-  async function helloworld() {
-    const response = await fetch("http://127.0.0.1:8000/api/hello?name=kehinde");
-    const data = await response.json();
-    // console.log(data);
-    setDataStr(JSON.stringify(data))
-  }
+  const {data, error, isLoading} = useSWR('http://127.0.0.1:8000/api/hello?name=kehinde', fetcher)
+  // const [dataStr, setDataStr] = useState('');
+  // async function helloworld() {
+  //   const response = await fetch("http://127.0.0.1:8000/api/hello?name=kehinde");
+  //   const data = await response.json();
+  //   // console.log(data);
+  //   setDataStr(JSON.stringify(data))
+  // }
 
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
 
-      <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={helloworld}>
-    Look up data
-  </button>
-
   <div>
-    {dataStr}
+    {JSON.stringify(data)}
   </div>
 
         <Image
